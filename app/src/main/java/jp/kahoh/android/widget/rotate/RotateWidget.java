@@ -22,10 +22,10 @@ public class RotateWidget extends AppWidgetProvider {
 
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.rotate_widget);
 
-		setOnClickPendingIntent(context, views, R.id.btn_up, RotateActivity.SCREEN_ORIENTATION_PORTRAIT);
-		setOnClickPendingIntent(context, views, R.id.btn_left, RotateActivity.SCREEN_ORIENTATION_LANDSCAPE);
-		setOnClickPendingIntent(context, views, R.id.btn_right, RotateActivity.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-		setOnClickPendingIntent(context, views, R.id.btn_down, RotateActivity.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+		setOnClickPendingIntent(context, views, R.id.btn_up, RotateActivity.ScreenOrientationType.SCREEN_ORIENTATION_PORTRAIT.getIntValue());
+		setOnClickPendingIntent(context, views, R.id.btn_left, RotateActivity.ScreenOrientationType.SCREEN_ORIENTATION_LANDSCAPE.getIntValue());
+		setOnClickPendingIntent(context, views, R.id.btn_right, RotateActivity.ScreenOrientationType.SCREEN_ORIENTATION_REVERSE_LANDSCAPE.getIntValue());
+		setOnClickPendingIntent(context, views, R.id.btn_down, RotateActivity.ScreenOrientationType.SCREEN_ORIENTATION_REVERSE_PORTRAIT.getIntValue());
 
 		// ウィジェットの更新
 		appWidgetManager.updateAppWidget(appWidgetIds, views);
@@ -34,7 +34,8 @@ public class RotateWidget extends AppWidgetProvider {
 	private void setOnClickPendingIntent(Context context, RemoteViews views, int resId, int orientationType) {
 		Intent intent = new Intent(context, RotateActivity.class);
 		intent.putExtra(RotateActivity.INTENT_KEY_IS_PORTRAIT, orientationType);
-		PendingIntent pendingIntent = PendingIntent.getActivity(context, orientationType, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent =
+				PendingIntent.getActivity(context, orientationType, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		views.setOnClickPendingIntent(resId, pendingIntent);
 	}
 }

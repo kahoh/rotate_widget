@@ -3,7 +3,9 @@ package jp.kahoh.android.widget.rotate;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 
 /**
  * Created by kaho on 15/09/01.
@@ -12,13 +14,31 @@ public class RotateActivity extends Activity {
 
 	public static final String INTENT_KEY_IS_PORTRAIT = "INTENT_KEY_IS_PORTRAIT";
 
-	public static final int SCREEN_ORIENTATION_PORTRAIT = 0;
+	public enum ScreenOrientationType {
+		SCREEN_ORIENTATION_PORTRAIT(0),
+		SCREEN_ORIENTATION_LANDSCAPE(1),
+		SCREEN_ORIENTATION_REVERSE_PORTRAIT(2),
+		SCREEN_ORIENTATION_REVERSE_LANDSCAPE(3);
 
-	public static final int SCREEN_ORIENTATION_LANDSCAPE = 1;
+		private int intValue;
 
-	public static final int SCREEN_ORIENTATION_REVERSE_PORTRAIT = 2;
+		private ScreenOrientationType(int intValue) {
+			this.intValue = intValue;
+		}
 
-	public static final int SCREEN_ORIENTATION_REVERSE_LANDSCAPE = 3;
+		public int getIntValue() {
+			return intValue;
+		}
+
+		public static ScreenOrientationType resolve(int intValue) {
+			for (ScreenOrientationType screenOrientationType : values()) {
+				if (intValue == screenOrientationType.getIntValue()) {
+					return screenOrientationType;
+				}
+			}
+			return null;
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -27,8 +47,7 @@ public class RotateActivity extends Activity {
 		Intent intent = getIntent();
 		int orientationType = intent.getIntExtra(INTENT_KEY_IS_PORTRAIT, -1);
 
-		//TODO 同じ向きなら処理をしない
-		switch (orientationType) {
+		switch (ScreenOrientationType.resolve(orientationType)) {
 			case SCREEN_ORIENTATION_PORTRAIT:
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				break;
